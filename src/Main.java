@@ -19,6 +19,31 @@ public class Main {
             v.out.add(p);
         }
 
+        void build() {
+            Queue<Node> q = new ArrayDeque<>();
+            root.fail = root;
+            q.add(root);
+
+            while (!q.isEmpty()) {
+                Node v = q.poll();
+                for (var e : v.next.entrySet()) {
+                    char c = e.getKey();
+                    Node u = e.getValue();
+                    Node f = v.fail;
+
+                    while (f != root && !f.next.containsKey(c)) {
+                        f = f.fail;
+                    }
+                    if (f.next.containsKey(c) && f.next.get(c) != u) {
+                        u.fail = f.next.get(c);
+                    } else {
+                        u.fail = root;
+                    }
+                    u.out.addAll(u.fail.out);
+                    q.add(u);
+                }
+            }
+        }
 
     }
 
