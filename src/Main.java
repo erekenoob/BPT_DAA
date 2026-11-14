@@ -45,6 +45,27 @@ public class Main {
             }
         }
 
+        int search(String text, boolean printMatches) {
+            Node v = root;
+            int totalMatches = 0;
+
+            for (int i = 0; i < text.length(); i++) {
+                char c = text.charAt(i);
+                while (v != root && !v.next.containsKey(c)) {
+                    v = v.fail;
+                }
+                if (v.next.containsKey(c)) {
+                    v = v.next.get(c);
+                }
+                if (!v.out.isEmpty()) {
+                    totalMatches += v.out.size();
+                    if (printMatches) {
+                        System.out.println("At index " + i + " matched: " + v.out);
+                    }
+                }
+            }
+            return totalMatches;
+        }
     }
 
 
