@@ -1,0 +1,18 @@
+Text:ushers
+At index 3 matched: [she, he]
+At index 5 matched: [hers]
+KMP check on 'ABABDABACDABABCABAB':found 1 match
+
+Benchmark Results 'Average of 5 runs'
+Patterns   TextLen    Aho-Corasick(ms)   KMP Separate(ms)   Matches
+10         1000       0,7788             1,7103             3
+100        1000       0,9888             4,2417             27
+1000       1000       2,1941             9,0179             253
+10         10000      1,8247             1,1314             26
+100        10000      0,9237             10,0975            266
+1000       10000      1,8202             97,3922            2391
+10         100000     2,2099             9,8476             236
+100        100000     2,9244             97,5924            2401
+1000       100000     4,6646             975,0467           24567
+
+Process finished with exit code 0
