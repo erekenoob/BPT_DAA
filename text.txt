@@ -1,1 +1,36 @@
+Aho–Corasick Algorithm — Explanation1. Why we need it and main idea
+When we need to find one pattern in a text, KMP works great in $O(n + m)$ time. However, if we have hundreds of patterns and run KMP separately for each one, we have to scan the entire text $k$ times, which takes $O(k \cdot n)$ time and becomes too slow.   The Aho–Corasick algorithm solves this by searching for all patterns at the same time in a single pass through the text. It builds a finite automaton from all patterns using three main parts: 
+Set root.fail = root, put the root’s children in the queue and set their failure links to point back to the root. These children have no non-empty suffix that is a trie prefix.
 
+For each node v and each of its children u accessible via some character c, calculate the longest proper suffix of the string represented by u that is also a trie prefix:
+
+Go to v.fail.
+Following failure links, go up as long as there is no edge for c and do not hit the root.
+If there is such an edge, assign u.fail to the node the edge points to; otherwise, assign u.fail to the root.
+Add the failure node’s outputs to u.out.
+The latter is important. For example, if the trie contains both “he” and “she”, reaching the end of “she” should produce both patterns since “he” is a suffix of “she”.
+
+3. Example: searching for {"he", "she", "his", "hers"} in "ushers"
+Draw the trie with the following branches:
+
+root → h → e → r → s
+h → i → s
+root → s → h → e
+Use dashed arrows to denote the failure links from the s → h node to h,and from s → h → e to h → e.
+
+Now let us scan "ushers" from left to right:
+
+u: No matching edge from the root – stay at the root.
+s, h, e: Go from root → s → h → e. At the node "e", "she" is found. Also the output of the "she" node contains "he" by failure link, so both patterns are found.
+r: The node "she" does not have r edge, follow the failure link to the node "he" that does have r edge and go to "her".
+s: Go to "hers" and find that pattern.
+No backtracking is needed.
+
+4. Time and space complexity
+Let (L = \sum |P_i|) be the total length of all patterns, (n) be the text length, and (z) be the number of matches.
+
+Building the trie: (O(L)), as each character of the pattern is inserted once.
+Building failure links: With the standard failure-link traversal, it is linear in the trie size for a fixed alphabet; the exact cost is determined by the representation of transitions.
+Search: (O(n + z)) with constant-time transition lookups. The text characters are processed once, reporting matches costs (O(z)).
+Space: (O(\text{nodes} \times \text{alphabet size})) if transitions are represented by arrays, or (O(L)) if trie transitions are kept in hash maps, plus the failure links and output transitions.
+Aho-Corasick requires additional space to keep the trie, but it may be significantly faster than applying KMP to each pattern individually because the text is processed only once.
